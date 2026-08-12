@@ -3,21 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "DoubleCounter Bypass — Paste a link, get a result" },
-      {
-        name: "description",
-        content: "Double Counter Bypass",
-      },
-      { property: "og:title", content: "DoubleCounter Bypass" },
-      { property: "og:description", content: "Double Counter Bypass" },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "/" }],
-  }),
   component: Index,
 });
 
@@ -41,7 +26,7 @@ function toFullUrl(input: string): string | null {
   if (!v) return null;
   if (/^https?:\/\//i.test(v)) return v;
   if (/^[A-Za-z0-9_-]{4,}$/.test(v)) return `https://beta.doublecounter.gg/v/${v}`;
-  const code = v.includes("/") ? v.split("/").filter(Boolean).pop() ?? "" : v;
+  const code = v.includes("/") ? (v.split("/").filter(Boolean).pop() ?? "") : v;
   if (/^[A-Za-z0-9_-]{4,}$/.test(code)) return `https://beta.doublecounter.gg/v/${code}`;
   return null;
 }
@@ -109,7 +94,13 @@ function Index() {
       } else if (data.step === "error") {
         doneRef.current = true;
         closeStream();
-        setStatus({ kind: "error", message: data.code === "dead_link" ? "Link is dead or expired. Generate a fresh link." : "Something went wrong." });
+        setStatus({
+          kind: "error",
+          message:
+            data.code === "dead_link"
+              ? "Link is dead or expired. Generate a fresh link."
+              : "Something went wrong.",
+        });
       }
     };
 
