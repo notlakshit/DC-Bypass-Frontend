@@ -81,3 +81,14 @@ async def increment() -> int:
         new_value = current + 1
         await asyncio.to_thread(_write_sync, new_value)
         return new_value
+
+
+async def set_value(value: int) -> int:
+    """Temporarily set the counter to an absolute value."""
+    global _in_memory
+    async with _lock:
+        if not _is_writable():
+            _in_memory = value
+            return _in_memory
+        await asyncio.to_thread(_write_sync, value)
+        return value

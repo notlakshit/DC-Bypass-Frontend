@@ -8,7 +8,7 @@ export const Route = createFileRoute("/")({
 
 const API_BASE =
   (import.meta.env.VITE_API_BASE as string | undefined)?.replace(/\/$/, "") ||
-  "https://dc-bypass-production-3408.up.railway.app";
+  "https://dc-bypass-production-7f8f.up.railway.app";
 
 type Status =
   | { kind: "idle" }
@@ -18,7 +18,7 @@ type Status =
 
 type SolveEvent =
   | { step: "queued" | "loading" | "solving" | "verifying"; message: string }
-  | { step: "done"; success: boolean; message?: string; userid?: string; count?: number }
+  | { step: "done"; success: boolean; message?: string; userid?: string; count?: number; code?: string }
   | { step: "error"; message: string; code?: string };
 
 function toFullUrl(input: string): string | null {
@@ -29,6 +29,19 @@ function toFullUrl(input: string): string | null {
   const code = v.includes("/") ? (v.split("/").filter(Boolean).pop() ?? "") : v;
   if (/^[A-Za-z0-9_-]{4,}$/.test(code)) return `https://beta.doublecounter.gg/v/${code}`;
   return null;
+}
+
+function errorForCode(code?: string): string {
+  switch (code) {
+    case "dead_link":
+      return "Link is dead or expired. Generate a fresh link.";
+    case "timed_out":
+      return "Timed out, Please Try Again";
+    case "verification_failed":
+      return "Account Blacklisted";
+    default:
+      return "Something went wrong.";
+  }
 }
 
 function Index() {
@@ -89,18 +102,12 @@ function Index() {
           if (typeof data.count === "number") setCount(data.count);
           setStatus({ kind: "ok", message: "VERIFIED" });
         } else {
-          setStatus({ kind: "error", message: "Something went wrong." });
+          setStatus({ kind: "error", message: errorForCode(data.code) });
         }
       } else if (data.step === "error") {
         doneRef.current = true;
         closeStream();
-        setStatus({
-          kind: "error",
-          message:
-            data.code === "dead_link"
-              ? "Link is dead or expired. Generate a fresh link."
-              : "Something went wrong.",
-        });
+        setStatus({ kind: "error", message: errorForCode(data.code) });
       }
     };
 
@@ -118,6 +125,38 @@ function Index() {
       <AnimatedBackground />
 
       <section className="glass-card w-full max-w-[33rem] rounded-3xl px-8 py-11 sm:px-12 sm:py-14">
+        <div className="mb-6 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-4 text-center">
+          <p className="text-sm font-medium text-amber-200">
+            Keep this running — donations welcome
+          </p>
+          <div className="mt-3 space-y-2">
+            <button
+              type="button"
+              onClick={() => { navigator.clipboard?.writeText("LapfHPxupB59s5fZntWvEtM5jauPhLR8wo"); }}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-xs text-amber-100/90 transition-colors hover:bg-amber-500/15"
+            >
+              <svg viewBox="0 0 32 32" className="h-5 w-5 flex-shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="16" r="16" fill="#2c2c4a" />
+                <path d="M16 4l9 6.5v11L16 28l-9-6.5v-11L16 4z" fill="#6979f8" opacity="0.9" />
+                <path d="M22.5 15.5c.3-1.9-1.1-3-3.2-3.6l.7-2.7-1.6-.4-.6 2.6a14 14 0 0 0-1.3-.3l.6-2.5-1.6-.4-.7 2.7c-.4-.1-.8-.2-1.2-.3l-2.2-.6-.4 1.7 1.6.4.7 2.7.5 1.9-1 3.7-.3 1.1 2.2.6 1.1 2.7 1.6.4.7-2.6c.5.1 1 .2 1.4.4l-.7 2.6 1.6.4.7-2.7c2.7.5 4.7.3 5.6-2.1.7-2-0.1-3.1-1.5-3.8 1.1-.3 1.9-1 2.1-2.3z" fill="#fff" />
+              </svg>
+              <span className="flex-1 break-all text-left font-mono">LTC: LapfHPxupB59s5fZntWvEtM5jauPhLR8wo</span>
+              <span className="text-amber-200/60">copy</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => { navigator.clipboard?.writeText("bc1q9dphvqe2s6v84aaqv5xvhzd39yjew53uru7gwf"); }}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-xs text-amber-100/90 transition-colors hover:bg-amber-500/15"
+            >
+              <svg viewBox="0 0 32 32" className="h-5 w-5 flex-shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="16" r="16" fill="#f7931a" />
+                <path d="M24.5 19.6c-.4 1.5-3 2.2-5.2 2.6l-1 3.6-2.2-.6 1-3.5c.6-.1 1.2-.3 1.7-.5l-1 3.5-2.2-.6 1-3.6c.5-.1.9-.3 1.4-.4l-1.6-5.6c.6-.2 1.3-.4 1.9-.5l1.6 5.6c.6-.2 1.2-.3 1.8-.5l1.6 5.7c.6-.2 1.3-.4 1.9-.5l.7 2.4z" fill="#fff" />
+              </svg>
+              <span className="flex-1 break-all text-left font-mono">BTC: bc1q9dphvqe2s6v84aaqv5xvhzd39yjew53uru7gwf</span>
+              <span className="text-amber-200/60">copy</span>
+            </button>
+          </div>
+        </div>
         <h1 className="text-center font-display text-4xl leading-tight tracking-tight text-foreground sm:text-5xl">
           DoubleCounter Bypass
         </h1>
@@ -193,7 +232,7 @@ function Index() {
         </div>
 
         <div className="mt-10 border-t border-border pt-5 text-center text-sm text-muted-foreground">
-          Made by <span className="font-medium text-foreground">Velorsi</span>
+          Made by <a href="https://discord.com/users/1464228835435479284" target="_blank" rel="noopener noreferrer" className="font-medium text-foreground transition-opacity hover:opacity-70">Velorsi</a>
         </div>
       </section>
     </main>
