@@ -3,12 +3,27 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "DoubleCounter Bypass — Paste a link, get a result" },
+      {
+        name: "description",
+        content: "Double Counter Bypass",
+      },
+      { property: "og:title", content: "DoubleCounter Bypass" },
+      { property: "og:description", content: "Double Counter Bypass" },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+  }),
   component: Index,
 });
 
 const API_BASE =
   (import.meta.env.VITE_API_BASE as string | undefined)?.replace(/\/$/, "") ||
-  "https://dc-bypass-production-7f8f.up.railway.app";
+  "https://dc-bypass-production-3408.up.railway.app";
 
 type Status =
   | { kind: "idle" }
@@ -26,7 +41,7 @@ function toFullUrl(input: string): string | null {
   if (!v) return null;
   if (/^https?:\/\//i.test(v)) return v;
   if (/^[A-Za-z0-9_-]{4,}$/.test(v)) return `https://beta.doublecounter.gg/v/${v}`;
-  const code = v.includes("/") ? (v.split("/").filter(Boolean).pop() ?? "") : v;
+  const code = v.includes("/") ? v.split("/").filter(Boolean).pop() ?? "" : v;
   if (/^[A-Za-z0-9_-]{4,}$/.test(code)) return `https://beta.doublecounter.gg/v/${code}`;
   return null;
 }
@@ -153,6 +168,18 @@ function Index() {
                 <path d="M24.5 19.6c-.4 1.5-3 2.2-5.2 2.6l-1 3.6-2.2-.6 1-3.5c.6-.1 1.2-.3 1.7-.5l-1 3.5-2.2-.6 1-3.6c.5-.1.9-.3 1.4-.4l-1.6-5.6c.6-.2 1.3-.4 1.9-.5l1.6 5.6c.6-.2 1.2-.3 1.8-.5l1.6 5.7c.6-.2 1.3-.4 1.9-.5l.7 2.4z" fill="#fff" />
               </svg>
               <span className="flex-1 break-all text-left font-mono">BTC: bc1q9dphvqe2s6v84aaqv5xvhzd39yjew53uru7gwf</span>
+              <span className="text-amber-200/60">copy</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => { navigator.clipboard?.writeText("0xD9Effa4ea4bFC33caD292717aE3A45d13d81eAA3"); }}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-xs text-amber-100/90 transition-colors hover:bg-amber-500/15"
+            >
+              <svg viewBox="0 0 32 32" className="h-5 w-5 flex-shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="16" r="16" fill="#8247e5" />
+                <path d="M21.5 12.8l-3-1.7c-.3-.2-.7-.2-1 0L13 13.2c-.3.2-.5.5-.5.9v3.4c0 .4.2.7.5.9l3 1.7c.3.2.7.2 1 0l2-1.1 1-1.7c.2-.3.5-.5.9-.5h.1c.4 0 .7.2.9.5.2.3.2.7 0 1l-1.5 2.5c-.2.3-.5.5-.8.6l-3.5 2c-.3.2-.7.2-1 0l-5-2.8c-.3-.2-.5-.5-.5-.9v-5.6c0-.4.2-.7.5-.9l5-2.8c.3-.2.7-.2 1 0z" fill="#fff" />
+              </svg>
+              <span className="flex-1 break-all text-left font-mono">POLY: 0xD9Effa4ea4bFC33caD292717aE3A45d13d81eAA3</span>
               <span className="text-amber-200/60">copy</span>
             </button>
           </div>
