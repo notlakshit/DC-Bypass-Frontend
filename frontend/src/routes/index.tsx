@@ -139,7 +139,28 @@ function Index() {
     <main className="relative flex min-h-screen items-center justify-center px-5 py-16">
       <AnimatedBackground />
 
-      <section className="glass-card w-full max-w-[33rem] rounded-3xl px-8 py-11 sm:px-12 sm:py-14">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+        <div className="mx-4 max-w-2xl rounded-3xl border border-red-500/40 bg-red-950/80 px-8 py-12 text-center shadow-2xl sm:px-16 sm:py-16">
+          <div className="mb-4 inline-flex h-20 w-20 items-center justify-center rounded-full border-2 border-red-500/50 bg-red-500/10">
+            <svg viewBox="0 0 24 24" className="h-10 w-10 text-red-400" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+          </div>
+          <h2 className="font-display text-5xl font-bold tracking-tight text-red-300 sm:text-6xl">
+            SERVICE CLOSED
+          </h2>
+          <p className="mt-5 text-base text-red-100/80 sm:text-lg">
+            This service has been permanently shut down and is no longer accepting requests.
+          </p>
+          <p className="mt-2 text-sm text-red-200/50">
+            Thank you to everyone who used and supported it.
+          </p>
+        </div>
+      </div>
+
+      <section className="pointer-events-none select-none opacity-30 glass-card w-full max-w-[33rem] rounded-3xl px-8 py-11 sm:px-12 sm:py-14">
         <div className="mb-6 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-4 text-center">
           <p className="text-sm font-medium text-amber-200">
             Keep this running — donations welcome
